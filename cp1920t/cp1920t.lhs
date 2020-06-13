@@ -968,41 +968,54 @@ outras funções auxiliares que sejam necessárias.
 
 \subsection*{Problema 1}
 \begin{code}
-discollect :: (Ord b, Ord a) => [(b, [a])] -> [(b, a)]
-discollect = lstr . id where
-                      lstr[(a,x)] = [(a,b)|b <- x]
 
+discollect = disc where
+  disc [ ] = [ ]
+  disc ((a, x ) : y) = [(a, b) | b <- x ] ++ disc y                     
 
 dic_exp :: Dict -> [(String,[String])]
 dic_exp = collect . tar
 
 tar = cataExp g where
-  g = undefined
+  g = either f h where
+    f = singl . split (const "") id
+    h (letter, list) = map (((++) letter) >< id) (concat list)
 
-dic_rd = undefined
 
-dic_in = undefined
+dic_rd = procura where
+  procura p t = lookup p (dic_exp t)
+
+
+dic_in = insere where
+  insere p s d = dic_imp([(p,[s])] ++ dic_exp d)
 
 \end{code}
 
 \subsection*{Problema 2}
 
 \begin{code}
-maisDir = cataBTree g
-  where g = undefined
+maisDir = cataBTree g where
+ g = either f h where
+  f = const Nothing 
+  h (a,(_, Nothing)) = Just a
+  h (a,(_,d)) = d
 
-maisEsq = cataBTree g
-  where g = undefined
+maisEsq = cataBTree g where 
+  g = either f h where
+  f = const Nothing 
+  h (a,(Nothing, _)) = Just a
+  h (a,(e,_)) = e
 
-insOrd' x = cataBTree g 
-  where g = undefined
+insOrd' x = cataBTree g where 
+ g = undefined
+
 
 insOrd a x = undefined
 
 isOrd' = cataBTree g
   where g = undefined
 
-isOrd = undefined
+isOrd = p1 . isOrd'
 
 
 rrot = undefined
