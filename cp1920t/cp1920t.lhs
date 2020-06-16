@@ -969,6 +969,7 @@ outras funções auxiliares que sejam necessárias.
 \subsection*{Problema 1}
 \begin{code}
 
+discollect :: [(t1, [t])] -> [(t1, t)]
 discollect = disc where
   disc [ ] = [ ]
   disc ((a, x ) : y) = [(a, b) | b <- x ] ++ disc y                     
@@ -981,11 +982,11 @@ tar = cataExp g where
     f = singl . split (const "") id
     h (letter, list) = map (((++) letter) >< id) (concat list)
 
-
+dic_rd :: String -> Dict -> Maybe [String]
 dic_rd = procura where
   procura p t = lookup p (dic_exp t)
 
-
+dic_in :: String -> String -> Dict -> Dict
 dic_in = insere where
   insere p s d = dic_imp([(p,[s])] ++ dic_exp d)
 
@@ -994,59 +995,82 @@ dic_in = insere where
 \subsection*{Problema 2}
 
 \begin{code}
+
+{-maisDir :: BTree a -> Maybe a-}
 maisDir = cataBTree g where
  g = either f h where
   f = const Nothing 
   h (a,(_, Nothing)) = Just a
   h (a,(_,d)) = d
 
+{-maisEsq :: BTree a -> Maybe a-}
 maisEsq = cataBTree g where 
   g = either f h where
   f = const Nothing 
   h (a,(Nothing, _)) = Just a
   h (a,(e,_)) = e
 
+
+{-insOrd' :: Ord a => a -> BTree a -> (BTree a, BTree a)-}
 insOrd' x = cataBTree g where 
  g = undefined
 
-
+{-insOrd :: Ord a => a -> BTree a -> BTree a-}
 insOrd a x = undefined
 
+
+{-isOrd' :: Ord a => BTree a -> (Bool, BTree a)-}
 isOrd' = cataBTree g
   where g = undefined
 
+{-isOrd :: Ord a => BTree a -> Bool-}
 isOrd = p1 . isOrd'
 
+{-rrot :: BTree a -> BTree a-}
+rrot (Node(a,(Node(e,(e1,d1)),d))) = Node(e,(e1,Node(a,(d1,d)))) 
 
-rrot = undefined
+{-lrot :: BTree a -> BTree a-}
+lrot (Node(a,(e,Node(d,(e1,d1))))) = Node(d,(Node(a,(e,e1)),d1)) 
 
-lrot = undefined
+{-splay :: [Bool] -> BTree a -> BTree a-}
+splay l t = undefined
 
-splay l t =  undefined
-  
 \end{code}
 
 \subsection*{Problema 3}
 
 \begin{code}
+
 extLTree :: Bdt a -> LTree a
 extLTree = cataBdt g where
-  g = undefined
+  g = either Leaf (Fork . p2)
 
-inBdt = undefined
+inBdt :: Either a (String, (Bdt a, Bdt a)) -> Bdt a
+inBdt = either Dec Query
 
-outBdt = undefined
+outBdt :: Bdt a -> Either a (String, (Bdt a, Bdt a))
+outBdt(Dec a) = i1 a
+outBdt(Query (s,(a1,a2))) = i2(s,(a1,a2))
 
-baseBdt = undefined
-recBdt = undefined
+baseBdt :: (a2 -> b1) -> (a1 -> b) -> (a -> d) -> Either a2 (a1, (a, a)) -> Either b1 (b, (d, d))
+baseBdt f g h = f -|- g >< (h >< h) 
 
-cataBdt = undefined
+recBdt :: (a -> d) -> Either b1 (b, (a, a)) -> Either b1 (b, (d, d))
+recBdt g = baseBdt id id g
 
-anaBdt = undefined
+cataBdt :: (Either b (String, (d, d)) -> d) -> Bdt b -> d
+cataBdt g = g . (recBdt (cataBdt g)) . outBdt
 
-navLTree :: LTree a -> ([Bool] -> LTree a)
-navLTree = cataLTree g 
-  where g = undefined
+anaBdt :: (a1 -> Either a (String, (a1, a1))) -> a1 -> Bdt a
+anaBdt g = inBdt . (recBdt (anaBdt g) ) . g
+
+navLTree :: LTree a -> ([Bool ] -> LTree a)
+navLTree a b = (cataLTree g) a
+                    where g = either Leaf f
+                          f (e,d) = (either f1 f2) (outList b) where
+                            f1 = (const (Fork (e,d)))
+                            f2 = ((uncurry navLTree) . (Cp.cond (p1) (split (const e) p2) (split (const d) p2)))
+
 \end{code}
 
 
