@@ -1372,10 +1372,17 @@ outras funções auxiliares que sejam necessárias.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{discollect}\mathbin{::}(\Conid{Ord}\;\Varid{b},\Conid{Ord}\;\Varid{a})\Rightarrow [\mskip1.5mu (\Varid{b},[\mskip1.5mu \Varid{a}\mskip1.5mu])\mskip1.5mu]\to [\mskip1.5mu (\Varid{b},\Varid{a})\mskip1.5mu]{}\<[E]%
+\>[B]{}\Varid{discollect}\mathbin{::}[\mskip1.5mu (\Varid{t1},[\mskip1.5mu \Varid{t}\mskip1.5mu])\mskip1.5mu]\to [\mskip1.5mu (\Varid{t1},\Varid{t})\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{discollect}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{discollect}\mathrel{=}\Varid{disc}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{disc}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{disc}\;((\Varid{a},\Varid{x})\mathbin{:}\Varid{y})\mathrel{=}[\mskip1.5mu (\Varid{a},\Varid{b})\mid \Varid{b}\leftarrow \Varid{x}\mskip1.5mu]\plus \Varid{disc}\;\Varid{y}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{dic\char95 exp}\mathbin{::}\Conid{Dict}\to [\mskip1.5mu (\Conid{String},[\mskip1.5mu \Conid{String}\mskip1.5mu])\mskip1.5mu]{}\<[E]%
 \\
@@ -1384,11 +1391,27 @@ outras funções auxiliares que sejam necessárias.
 \>[B]{}\Varid{tar}\mathrel{=}\Varid{cataExp}\;\Varid{g}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\Varid{g}\mathrel{=}\alt{\Varid{f}}{\Varid{h}}\;\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathrel{=}\Varid{singl}\comp \conj{\underline{\text{\tt \char34 \char34}}}{\Varid{id}}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{h}\;(\Varid{letter},\Varid{list})\mathrel{=}\map \;(((\plus )\;\Varid{letter})\times\Varid{id})\;(\Varid{concat}\;\Varid{list}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{dic\char95 rd}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{dic\char95 rd}\mathbin{::}\Conid{String}\to \Conid{Dict}\to \Conid{Maybe}\;[\mskip1.5mu \Conid{String}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{dic\char95 rd}\mathrel{=}\Varid{procura}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{procura}\;\Varid{p}\;\Varid{t}\mathrel{=}\Varid{lookup}\;\Varid{p}\;(\Varid{dic\char95 exp}\;\Varid{t}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{dic\char95 in}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{dic\char95 in}\mathbin{::}\Conid{String}\to \Conid{String}\to \Conid{Dict}\to \Conid{Dict}{}\<[E]%
+\\
+\>[B]{}\Varid{dic\char95 in}\mathrel{=}\Varid{insere}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{insere}\;\Varid{p}\;\Varid{s}\;\Varid{d}\mathrel{=}\Varid{dic\char95 imp}\;([\mskip1.5mu (\Varid{p},[\mskip1.5mu \Varid{s}\mskip1.5mu])\mskip1.5mu]\plus \Varid{dic\char95 exp}\;\Varid{d}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1397,22 +1420,37 @@ outras funções auxiliares que sejam necessárias.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{14}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{maisDir}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{maisDir}\mathrel{=}\Varid{cataBTree}\;\Varid{g}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\Varid{g}\mathrel{=}\alt{\Varid{f}}{\Varid{h}}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\Varid{f}\mathrel{=}\underline{\Conid{Nothing}}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{h}\;(\Varid{a},(\anonymous ,\Conid{Nothing}))\mathrel{=}\Conid{Just}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{h}\;(\Varid{a},(\anonymous ,\Varid{d}))\mathrel{=}\Varid{d}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{maisEsq}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{maisEsq}\mathrel{=}\Varid{cataBTree}\;\Varid{g}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\Varid{g}\mathrel{=}\alt{\Varid{f}}{\Varid{h}}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{f}\mathrel{=}\underline{\Conid{Nothing}}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{h}\;(\Varid{a},(\Conid{Nothing},\anonymous ))\mathrel{=}\Conid{Just}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{h}\;(\Varid{a},(\Varid{e},\anonymous ))\mathrel{=}\Varid{e}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{insOrd'}\;\Varid{x}\mathrel{=}\Varid{cataBTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{insOrd'}\;\Varid{x}\mathrel{=}\Varid{cataBTree}\;\Varid{g}\;\mathbf{where}{}\<[E]%
 \\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{g}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{insOrd}\;\Varid{a}\;\Varid{x}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
@@ -1421,14 +1459,13 @@ outras funções auxiliares que sejam necessárias.
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{isOrd}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{isOrd}\mathrel{=}\p1\comp \Varid{isOrd'}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{rrot}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{rrot}\;(\Conid{Node}\;(\Varid{a},(\Conid{Node}\;(\Varid{e},(e_1 ,\Varid{d1})),\Varid{d})))\mathrel{=}\Conid{Node}\;(\Varid{e},(e_1 ,\Conid{Node}\;(\Varid{a},(\Varid{d1},\Varid{d})))){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{lrot}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{lrot}\;(\Conid{Node}\;(\Varid{a},(\Varid{e},\Conid{Node}\;(\Varid{d},(e_1 ,\Varid{d1})))))\mathrel{=}\Conid{Node}\;(\Varid{d},(\Conid{Node}\;(\Varid{a},(\Varid{e},e_1 )),\Varid{d1})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{splay}\;\Varid{l}\;\Varid{t}\mathrel{=}{}\<[14]%
-\>[14]{}\bot {}\<[E]%
+\>[B]{}\Varid{splay}\;\Varid{l}\;\Varid{t}\mathrel{=}\bot {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1443,26 +1480,75 @@ outras funções auxiliares que sejam necessárias.
 \>[B]{}\Varid{extLTree}\mathrel{=}\Varid{cataBdt}\;\Varid{g}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\Varid{g}\mathrel{=}\alt{\Conid{Leaf}}{\Conid{Fork}\comp \p2}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{inBdt}\mathrel{=}\bot {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{outBdt}\mathrel{=}\bot {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{baseBdt}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{inBdt}\mathbin{::}\Varid{a}+(\Conid{String},(\Conid{Bdt}\;\Varid{a},\Conid{Bdt}\;\Varid{a}))\to \Conid{Bdt}\;\Varid{a}{}\<[E]%
 \\
-\>[B]{}\Varid{recBdt}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{inBdt}\mathrel{=}\alt{\Conid{Dec}}{\Conid{Query}}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{cataBdt}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outBdt}\mathbin{::}\Conid{Bdt}\;\Varid{a}\to \Varid{a}+(\Conid{String},(\Conid{Bdt}\;\Varid{a},\Conid{Bdt}\;\Varid{a})){}\<[E]%
+\\
+\>[B]{}\Varid{outBdt}\;(\Conid{Dec}\;\Varid{a})\mathrel{=}i_1\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{outBdt}\;(\Conid{Query}\;(\Varid{s},(\Varid{a1},\Varid{a2})))\mathrel{=}i_2\;(\Varid{s},(\Varid{a1},\Varid{a2})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{anaBdt}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{baseBdt}\mathbin{::}(\Varid{a2}\to \Varid{b1})\to (\Varid{a1}\to \Varid{b})\to (\Varid{a}\to \Varid{d})\to \Varid{a2}+(\Varid{a1},(\Varid{a},\Varid{a}))\to \Varid{b1}+(\Varid{b},(\Varid{d},\Varid{d})){}\<[E]%
+\\
+\>[B]{}\Varid{baseBdt}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{f}+\Varid{g}\times(\Varid{h}\times\Varid{h}){}\<[E]%
 \\[\blanklineskip]%
+\>[B]{}\Varid{recBdt}\mathbin{::}(\Varid{a}\to \Varid{d})\to \Varid{b1}+(\Varid{b},(\Varid{a},\Varid{a}))\to \Varid{b1}+(\Varid{b},(\Varid{d},\Varid{d})){}\<[E]%
+\\
+\>[B]{}\Varid{recBdt}\;\Varid{g}\mathrel{=}\Varid{baseBdt}\;\Varid{id}\;\Varid{id}\;\Varid{g}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{cataBdt}\mathbin{::}(\Varid{b}+(\Conid{String},(\Varid{d},\Varid{d}))\to \Varid{d})\to \Conid{Bdt}\;\Varid{b}\to \Varid{d}{}\<[E]%
+\\
+\>[B]{}\Varid{cataBdt}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recBdt}\;(\Varid{cataBdt}\;\Varid{g}))\comp \Varid{outBdt}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{anaBdt}\mathbin{::}(\Varid{a1}\to \Varid{a}+(\Conid{String},(\Varid{a1},\Varid{a1})))\to \Varid{a1}\to \Conid{Bdt}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{anaBdt}\;\Varid{g}\mathrel{=}\Varid{inBdt}\comp (\Varid{recBdt}\;(\Varid{anaBdt}\;\Varid{g}))\comp \Varid{g}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\Conid{Bdt}\;\Conid{A}}
+&
+     \ensuremath{\Conid{A}\mathbin{+}(\Conid{Str}\times(\Conid{Bdt}\;\Conid{A}\times\Conid{Bdt}\;\Conid{A}))}
+            \ar[l]_-{\ensuremath{\Varid{inBdt}}}
+\\
+     \ensuremath{\mathit C}
+           \ar[r]_-{\ensuremath{\Varid{g}}}
+           \ar[u]^-{\ensuremath{\Varid{anaBdt}\;\Varid{g}}}
+&
+     \ensuremath{\Conid{A}\mathbin{+}(\Conid{Str}\times(\mathit C\times\mathit C))}
+           \ar[u]_-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times(\Varid{anaBdt}\;\Varid{g}\times\Varid{anaBdt}\;\Varid{g}))}}
+}
+\end{eqnarray*}
+
+
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{21}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{27}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{29}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{navLTree}\mathbin{::}\mathsf{LTree}\;\Varid{a}\to ([\mskip1.5mu \Conid{Bool}\mskip1.5mu]\to \mathsf{LTree}\;\Varid{a}){}\<[E]%
 \\
-\>[B]{}\Varid{navLTree}\mathrel{=}\Varid{cataLTree}\;\Varid{g}{}\<[E]%
+\>[B]{}\Varid{navLTree}\;\Varid{a}\;\Varid{b}\mathrel{=}(\Varid{cataLTree}\;\Varid{g})\;\Varid{a}{}\<[E]%
 \\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\mathbf{where}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\hsindent{21}{}\<[21]%
+\>[21]{}\mathbf{where}\;\Varid{g}\mathrel{=}\alt{\Conid{Leaf}}{\Varid{f}}{}\<[E]%
+\\
+\>[21]{}\hsindent{6}{}\<[27]%
+\>[27]{}\Varid{f}\;(\Varid{e},\Varid{d})\mathrel{=}\alt{\Varid{f1}}{\Varid{f2}}\;(\Varid{outList}\;\Varid{b})\;\mathbf{where}{}\<[E]%
+\\
+\>[27]{}\hsindent{2}{}\<[29]%
+\>[29]{}\Varid{f1}\mathrel{=}\underline{(\Conid{Fork}\;(\Varid{e},\Varid{d}))}{}\<[E]%
+\\
+\>[27]{}\hsindent{2}{}\<[29]%
+\>[29]{}\Varid{f2}\mathrel{=}(\uncurry{\Varid{navLTree}}\comp (\Varid{\Conid{Cp}.cond}\;(\p1)\;\conj{\underline{\Varid{e}}}{\p2}\;\conj{\underline{\Varid{d}}}{\p2})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

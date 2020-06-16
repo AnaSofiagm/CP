@@ -996,14 +996,12 @@ dic_in = insere where
 
 \begin{code}
 
-{-maisDir :: BTree a -> Maybe a-}
 maisDir = cataBTree g where
  g = either f h where
   f = const Nothing 
   h (a,(_, Nothing)) = Just a
   h (a,(_,d)) = d
 
-{-maisEsq :: BTree a -> Maybe a-}
 maisEsq = cataBTree g where 
   g = either f h where
   f = const Nothing 
@@ -1011,28 +1009,21 @@ maisEsq = cataBTree g where
   h (a,(e,_)) = e
 
 
-{-insOrd' :: Ord a => a -> BTree a -> (BTree a, BTree a)-}
 insOrd' x = cataBTree g where 
  g = undefined
 
-{-insOrd :: Ord a => a -> BTree a -> BTree a-}
 insOrd a x = undefined
 
 
-{-isOrd' :: Ord a => BTree a -> (Bool, BTree a)-}
 isOrd' = cataBTree g
   where g = undefined
 
-{-isOrd :: Ord a => BTree a -> Bool-}
 isOrd = p1 . isOrd'
 
-{-rrot :: BTree a -> BTree a-}
 rrot (Node(a,(Node(e,(e1,d1)),d))) = Node(e,(e1,Node(a,(d1,d)))) 
 
-{-lrot :: BTree a -> BTree a-}
 lrot (Node(a,(e,Node(d,(e1,d1))))) = Node(d,(Node(a,(e,e1)),d1)) 
 
-{-splay :: [Bool] -> BTree a -> BTree a-}
 splay l t = undefined
 
 \end{code}
@@ -1063,7 +1054,27 @@ cataBdt g = g . (recBdt (cataBdt g)) . outBdt
 
 anaBdt :: (a1 -> Either a (String, (a1, a1))) -> a1 -> Bdt a
 anaBdt g = inBdt . (recBdt (anaBdt g) ) . g
+\end{code}
 
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Bdt A|
+&
+     |A + (Str >< (Bdt A >< Bdt A))|
+            \ar[l]_-{|inBdt|}
+\\
+     |C|
+           \ar[r]_-{|g|}
+           \ar[u]^-{|anaBdt g|}
+&
+     |A + (Str >< (C >< C))|
+           \ar[u]_-{|id + (id >< (anaBdt g >< anaBdt g))|}
+}
+\end{eqnarray*}
+
+
+
+\begin{code}
 navLTree :: LTree a -> ([Bool ] -> LTree a)
 navLTree a b = (cataLTree g) a
                     where g = either Leaf f
