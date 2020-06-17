@@ -117,9 +117,9 @@
 \\\hline
 a75248 & Ana Sofia Gomes Marques 
 \\
-a22222 & Nome2 (preencher)	
+a70699 & Pedro Araújo
 \\
-a33333 & Nome3 (preencher)	
+a77667 & Luis Pereira
 \end{tabular}
 \end{center}
 
@@ -998,33 +998,87 @@ dic_in = insere where
 
 maisDir = cataBTree g where
  g = either f h where
-  f = const Nothing 
+  f = nothing 
   h (a,(_, Nothing)) = Just a
   h (a,(_,d)) = d
 
 maisEsq = cataBTree g where 
   g = either f h where
-  f = const Nothing 
+  f = nothing
   h (a,(Nothing, _)) = Just a
   h (a,(e,_)) = e
 
 
+
 insOrd' x = cataBTree g where 
- g = undefined
+  g = split (either h1 h2) (either k1 k2) where
+      h1 = (const (Node (x,(Empty,Empty))))
+      h2 (a,((fe,ge),(fd,gd))) | x == a = Node (a,(ge,gd))
+                               | x > a = Node (a,(ge,fd))
+                               | otherwise = Node (a,(fe,gd))
+      k1 = (const Empty)
+      k2 (a,((fe,ge),(fd,gd))) = Node (a,(ge,gd))
 
-insOrd a x = undefined
+
+insOrd a = p1 . (insOrd' a)
 
 
-isOrd' = cataBTree g
-  where g = undefined
+
+isOrd' = cataBTree g where 
+  g = split (either h1 h2) (either k1 k2) where
+    h1 = (const True) 
+    h2 = bal
+    k1 = (const Empty) 
+    k2 (a,((fe,ge),(fd,gd))) = Node (a,(ge,gd))
+
 
 isOrd = p1 . isOrd'
 
-rrot (Node(a,(Node(e,(e1,d1)),d))) = Node(e,(e1,Node(a,(d1,d)))) 
+-- faz a comparação da base com esq ou dir
+f :: (Ord a) => (a -> a -> Bool) -> (a, BTree a) -> Bool
+f _ (_,Empty) = True
+f b (a,(Node (c,(e,d)))) = b a c
+
+
+-- para ver se esta balanceada
+bal:: (Ord a) => (a,((Bool,BTree a),(Bool,BTree a))) -> Bool
+bal = uncurry (&&) . (split s1 s2) where
+  s1 = (uncurry (&&) . split (p1 . p1 . p2) ((f (>)) . (split p1 (p2 . p1 . p2))))
+  s2 =  (uncurry (&&) . split (p1 . p2 . p2) ((f (<)) . (split p1 (p2 . p2 . p2))))
+
+
+
+
+rrot (Node(a,(Node(e,(e1,d1)),d))) = Node(e,(e1,Node(a,(d1,d))))
+rrot a = a
+
 
 lrot (Node(a,(e,Node(d,(e1,d1))))) = Node(d,(Node(a,(e,e1)),d1)) 
+lrot a = a
 
-splay l t = undefined
+
+splay = cataList g where
+ g  = either g1 g2 where
+  g1 =(const idBTree) 
+  g2 = ((uncurry (.)) . (id >< l) . swap)
+
+
+-- se true vai pela esquerda , se false vai pela direita
+l x = if x then ln 
+           else rn
+
+
+ln :: BTree a -> BTree a
+ln Empty = Empty
+ln (Node (a,(e,d))) = e
+
+rn :: BTree a -> BTree a
+rn Empty = Empty
+rn (Node (a,(e,d))) = d
+
+
+idBTree :: BTree a -> BTree a
+idBTree a = a
 
 \end{code}
 
@@ -1075,12 +1129,16 @@ anaBdt g = inBdt . (recBdt (anaBdt g) ) . g
 
 
 \begin{code}
+-- cond p f g = (either f g) . (grd p)
+--grd :: (a -> Bool) -> a -> Either a a
+--grd p x = if p x then Left x else Right x
+
 navLTree :: LTree a -> ([Bool ] -> LTree a)
 navLTree a b = (cataLTree g) a
-                    where g = either Leaf f
-                          f (e,d) = (either f1 f2) (outList b) where
-                            f1 = (const (Fork (e,d)))
-                            f2 = ((uncurry navLTree) . (Cp.cond (p1) (split (const e) p2) (split (const d) p2)))
+      where g = either Leaf f
+            f (e,d) = (either f1 f2) (outList b) where
+               f1 = (const (Fork (e,d)))
+               f2 = ((uncurry navLTree) . (Cp.cond (p1) (split (const e) p2) (split (const d) p2)))
 
 \end{code}
 
@@ -1088,9 +1146,8 @@ navLTree a b = (cataLTree g) a
 \subsection*{Problema 4}
 
 \begin{code}
-bnavLTree = cataLTree g
+bnavLTree  = (cataLTree g)
   where g = undefined
-
 
 pbnavLTree = cataLTree g
   where g = undefined 
